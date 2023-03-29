@@ -1,0 +1,28 @@
+<h1>Table</h1>
+<mat-table #table [dataSource]="dataSource">
+
+  <ng-container *ngFor="let column of columns" [matColumnDef]="column.id">
+    <!--column title-->
+    <mat-header-cell *matHeaderCellDef>
+      <h4>{{ column.title }}</h4>
+    </mat-header-cell>
+
+    <!--row each column-->
+    <mat-cell *matCellDef="let element;index as i">
+      <p *ngIf="column.id=='order_number'">{{ pageIndex * pageSize + i + 1 }}</p>
+      <p *ngIf="column.id!='order_number'&&column.id!='action'"> {{column.renderRow(element)}}</p>
+      <div *ngIf="column.id=='action'" [innerHTML]="column.renderRow(i)">
+      </div>
+    </mat-cell>
+
+  </ng-container>
+  <!-- {{ (page.current - 1) * page.sizeOnPage + i + 1 }} -->
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<mat-paginator #paginator class="paginator" (page)="handlePageEvent($event)" [length]="total" [pageSize]="pageSize"
+  [disabled]="disabled" [showFirstLastButtons]="showFirstLastButtons"
+  [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []" [hidePageSize]="hidePageSize" [pageIndex]="pageIndex">
+</mat-paginator>
